@@ -3,19 +3,27 @@ import 'dart:convert';
 import 'package:chat_client_app/core/app.dart';
 import 'package:chat_client_app/features/themes_page/data/websocket/talk_theme.dart';
 import 'package:chat_client_app/features/themes_page/presentation/cubit/base_socket_subscription_cubit.dart';
+import 'package:chat_client_app/features/themes_page/presentation/cubit/chat_subscription_cubit.dart';
 
 class ThemeSubscriptionCubit extends BaseSocketSubscriptionCubit<ThemeSubscriptionState>{
-  ThemeSubscriptionCubit():super(const ThemeSubscriptionState(), App.wsUrl);
+  ThemeSubscriptionCubit({required this.chatSubscriptionCubit}):super(const ThemeSubscriptionState(), App.wsUrl);
+  final ChatSubscriptionCubit chatSubscriptionCubit;
   
   @override
   void onReceivedSubscribedEvent(dynamic eventJson) {
-    if(eventJson is TalkTheme){
-      emit(state.copyWith(selectTheme: eventJson) as ThemeSubscriptionState);
-      return;
+    try{
+      if(eventJson is TalkTheme){
+        emit(state.copyWith(selectTheme: eventJson) as ThemeSubscriptionState);
+        chatSubscriptionCubit.initChat(currentId: state.getSelectedTheme!.id!);
+        return;
+      }
+      final List jsonList = jsonDecode(jsonEncode(eventJson));
+      final List<TalkTheme> themes = jsonList.map((e) => TalkTheme.fromJson(e)).toList();
+      emit(state.copyWith(themes: themes, json: eventJson.toString()) as ThemeSubscriptionState);
+    }catch(_){
+      
     }
-    final List jsonList = jsonDecode(jsonEncode(eventJson));
-    final List<TalkTheme> themes = jsonList.map((e) => TalkTheme.fromJson(e)).toList();
-    emit(state.copyWith(themes: themes, json: eventJson.toString()) as ThemeSubscriptionState);
+    
   }
 
   void addNewTheme({required TalkTheme talkTheme}){
@@ -24,7 +32,6 @@ class ThemeSubscriptionCubit extends BaseSocketSubscriptionCubit<ThemeSubscripti
 
   void selectTheme({required TalkTheme talkTheme}){
     send(event: 'selectTheme', message: talkTheme.id);
-    send(event: 'join', message: talkTheme.id);
   }
 
   void deleteTheme({required TalkTheme talkTheme}){

@@ -5,7 +5,7 @@ import 'package:chat_client_app/core/routes/app_router.dart';
 import 'package:chat_client_app/di/injection_container.dart';
 import 'package:chat_client_app/features/themes_page/data/theme_actioons.dart';
 import 'package:chat_client_app/features/themes_page/data/websocket/talk_theme.dart';
-import 'package:chat_client_app/features/themes_page/presentation/cubit/chat_subscription_cubit.dart';
+import 'package:chat_client_app/features/themes_page/presentation/cubit/theme_subscription_cubit.dart';
 import 'package:chat_client_app/features/themes_page/presentation/widgets/theme_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

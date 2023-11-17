@@ -5,6 +5,7 @@ import 'package:chat_client_app/core/app.dart';
 import 'package:chat_client_app/core/socket/web_socket_state.dart';
 import 'package:chat_client_app/core/utils/exceptions.dart';
 import 'package:chat_client_app/features/themes_page/data/websocket/talk_theme.dart';
+import 'package:chat_client_app/features/themes_page/data/websocket/user_connect.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
@@ -54,6 +55,8 @@ class ChatSubscriptionWebSocketChannel{
 
     _channel!.on('themes', (data) => _receivedSubscriptionMessages.add(data));
     _channel!.on('createdTheme', (data) => _receivedSubscriptionMessages.add(TalkTheme.fromJson(jsonDecode(jsonEncode(data)))));
+    _channel!.on('join', (data) => _receivedSubscriptionMessages.add(UserJoinedInRoom(id: data)));
+    
   }
 
   /// Закрываем соединение. Можно будет перезапустить с помощью connect
