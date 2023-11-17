@@ -56,6 +56,7 @@ class ChatSubscriptionWebSocketChannel{
     _channel!.on('themes', (data) => _receivedSubscriptionMessages.add(data));
     _channel!.on('createdTheme', (data) => _receivedSubscriptionMessages.add(TalkTheme.fromJson(jsonDecode(jsonEncode(data)))));
     _channel!.on('join', (data) => _receivedSubscriptionMessages.add(UserJoinedInRoom(id: data)));
+    _channel!.on('messages', (data) => _receivedSubscriptionMessages.add(UserJoinedInRoom(id: data)));
     
   }
 
