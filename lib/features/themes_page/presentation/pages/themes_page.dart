@@ -19,18 +19,16 @@ class ThemesPage extends StatefulWidget {
 }
 
 class _ThemesPageState extends State<ThemesPage> {
-  late ThemeSubscriptionCubit _chatSubscriptionCubit;
+  late ThemeSubscriptionCubit _themesSubscriptionCubit;
   late TextEditingController _titleController;
 
   @override
   void initState() {
     super.initState();
     _titleController = TextEditingController();
-    _chatSubscriptionCubit = locator.get<ThemeSubscriptionCubit>();
+    _themesSubscriptionCubit = locator.get<ThemeSubscriptionCubit>();
+    _themesSubscriptionCubit.initSocketConnection();
   }
-
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +37,7 @@ class _ThemesPageState extends State<ThemesPage> {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: BlocBuilder<ThemeSubscriptionCubit, ThemeSubscriptionState>(
-          bloc: _chatSubscriptionCubit,
+          bloc: _themesSubscriptionCubit,
           builder: (context, ThemeSubscriptionState state) {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -58,7 +56,13 @@ class _ThemesPageState extends State<ThemesPage> {
                           )),
                       Padding(
                         padding: const EdgeInsets.only(top: 20, left: 10),
-                        child: ElevatedButton(onPressed: () => context.router.push(ChatRoute(theme: TalkTheme(isCanRing: false, title: _titleController.text), action: ThemeAction.create)), child: const Text("Начать диалог")),
+                        child: ElevatedButton(
+                            onPressed: () => context.router.push(ChatRoute(
+                                theme: TalkTheme(
+                                    isCanRing: false,
+                                    title: _titleController.text),
+                                action: ThemeAction.create)),
+                            child: const Text("Начать диалог")),
                       )
                     ],
                   ),
@@ -67,8 +71,8 @@ class _ThemesPageState extends State<ThemesPage> {
                     children: state.getThemes
                         .map((e) => ThemeWidget(
                               theme: e,
-                              onClick: (theme) =>
-                                  context.router.push(ChatRoute(theme: theme, action: ThemeAction.select)),
+                              onClick: (theme) => context.router.push(ChatRoute(
+                                  theme: theme, action: ThemeAction.select)),
                             ))
                         .toList()),
               ],
@@ -84,7 +88,7 @@ class _ThemesPageState extends State<ThemesPage> {
   List<Widget> _buildActions() => [
         IconButton(
             onPressed: () {
-              _chatSubscriptionCubit.addNewTheme(
+              _themesSubscriptionCubit.addNewTheme(
                   talkTheme: TalkTheme(title: 'test', isCanRing: false));
             },
             icon: const Icon(

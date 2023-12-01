@@ -6,9 +6,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 abstract class BaseSocketSubscriptionCubit<State extends BaseSocketSubscriptionState> extends Cubit<State>{
-  BaseSocketSubscriptionCubit(State initialState, this.url):super(initialState){
-    _initSocketConnection();
-  }
+  BaseSocketSubscriptionCubit(State initialState, this.url):super(initialState);
   final String url;
   ChatSubscriptionWebSocketChannel? webSocket;
   StreamSubscription<WebSocketState>? webSocketStateSubscription;
@@ -19,7 +17,7 @@ abstract class BaseSocketSubscriptionCubit<State extends BaseSocketSubscriptionS
   }
 
 
-  Future<void> _initSocketConnection() async {
+  Future<void> initSocketConnection() async {
     if (state.isConnectionEstablished) {
       return;
     }
@@ -45,7 +43,7 @@ abstract class BaseSocketSubscriptionCubit<State extends BaseSocketSubscriptionS
       case WebSocketState.disconnected:
         emit(state.copyWith(isConnectionEstablished: false) as State);
         // Пытаемся установить сокет соединение снова
-        _initSocketConnection();
+        initSocketConnection();
         break;
       case WebSocketState.initial:
       case WebSocketState.connecting:

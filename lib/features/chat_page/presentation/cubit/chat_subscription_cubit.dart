@@ -1,7 +1,7 @@
 
 import 'package:chat_client_app/core/app.dart';
 import 'package:chat_client_app/features/themes_page/data/websocket/user_connect.dart';
-import 'package:chat_client_app/features/themes_page/presentation/cubit/base_socket_subscription_cubit.dart';
+import 'package:chat_client_app/core/presentation/cubit/base_socket_subscription_cubit.dart';
 
 class ChatSubscriptionCubit extends BaseSocketSubscriptionCubit<BaseSocketSubscriptionState>{
   ChatSubscriptionCubit():super(ChatNotInitState(), App.wsUrl);
@@ -42,3 +42,5 @@ class UserNotConnectedState extends BaseSocketSubscriptionState{
 }
 
 class UserConnectedState extends BaseSocketSubscriptionState{}
+
+class UserGetMessages extends BaseSocketSubscriptionState{}
