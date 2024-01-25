@@ -13,13 +13,16 @@ abstract class AppColors {
   800: Color(0xFF111733),
   900: Color(0xFF090E24),
 });
-static const int _mcgpalette0PrimaryValue = 0xFF1C274C;
+  static const int _mcgpalette0PrimaryValue = 0xFF1C274C;
 
-static const MaterialColor mcgpalette0Accent = MaterialColor(_mcgpalette0AccentValue, <int, Color>{
-  100: Color(0xFF6272FF),
-  200: Color(_mcgpalette0AccentValue),
-  400: Color(0xFF001AFB),
-  700: Color(0xFF0018E1),
-});
-static const int _mcgpalette0AccentValue = 0xFF2F45FF;
+  static const MaterialColor mcgpalette0Accent = MaterialColor(_mcgpalette0AccentValue, <int, Color>{
+    100: Color(0xFF6272FF),
+    200: Color(_mcgpalette0AccentValue),
+    400: Color(0xFF001AFB),
+    700: Color(0xFF0018E1),
+  });
+  static const int _mcgpalette0AccentValue = 0xFF2F45FF;
+
+  static const Color white1 = Colors.white;
+
 }

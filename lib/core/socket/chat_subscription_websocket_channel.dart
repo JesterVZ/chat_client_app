@@ -29,7 +29,7 @@ class ChatSubscriptionWebSocketChannel{
 
   /// Стрим полученных из сокет соединения сообщений, на которые мы подписались с помощью subscribe.
   /// Возвращает json мапу
-  ValueStream get receivedSubscriptionMessages => _receivedSubscriptionMessages.stream;
+  ValueStream get receivedSubscriptionMessages => _themesSubscriptionMessages.stream;
 
   Future<void> connect() async {
     if (state == WebSocketState.initial || state == WebSocketState.disconnected) {
@@ -53,9 +53,9 @@ class ChatSubscriptionWebSocketChannel{
       );
     }
 
-    _channel!.on('themes', (data) => _receivedSubscriptionMessages.add(data));
-    _channel!.on('createdTheme', (data) => _receivedSubscriptionMessages.add(TalkTheme.fromJson(jsonDecode(jsonEncode(data)))));
-    _channel!.on('join', (data) => _receivedSubscriptionMessages.add(UserJoinedInRoom(id: data)));
+    _channel!.on('themes', (data) => _themesSubscriptionMessages.add(data));
+    _channel!.on('createdTheme', (data) => _themesSubscriptionMessages.add(TalkTheme.fromJson(jsonDecode(jsonEncode(data)))));
+    _channel!.on('join', (data) => _themesSubscriptionMessages.add(UserJoinedInRoom(id: data)));
     
   }
 
@@ -106,7 +106,7 @@ class ChatSubscriptionWebSocketChannel{
   int _reconnectTries = 0;
 
   final _stateStream = BehaviorSubject<WebSocketState>.seeded(WebSocketState.initial);
-  final _receivedSubscriptionMessages = BehaviorSubject();
+  final _themesSubscriptionMessages = BehaviorSubject();
   set _state(WebSocketState state) => _stateStream.add(state);
 
   Socket? _channel;

@@ -5,6 +5,9 @@ import 'package:chat_client_app/core/socket/web_socket_state.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+/// Базовый кубит для подключения и работы с WebSocket
+/// Позволяет подписываться и отписываться
+
 abstract class BaseSocketSubscriptionCubit<State extends BaseSocketSubscriptionState> extends Cubit<State>{
   BaseSocketSubscriptionCubit(State initialState, this.url):super(initialState){
     _initSocketConnection();
