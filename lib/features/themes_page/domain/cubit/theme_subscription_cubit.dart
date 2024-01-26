@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:chat_client_app/core/app.dart';
 import 'package:chat_client_app/features/themes_page/data/websocket/talk_theme.dart';
-import 'package:chat_client_app/features/themes_page/presentation/cubit/base_socket_subscription_cubit.dart';
-import 'package:chat_client_app/features/themes_page/presentation/cubit/chat_subscription_cubit.dart';
+import 'package:chat_client_app/features/themes_page/domain/cubit/base_socket_subscription_cubit.dart';
+import 'package:chat_client_app/features/chat_page/domain/cubit/chat_subscription_cubit.dart';
 
 class ThemeSubscriptionCubit extends BaseSocketSubscriptionCubit<ThemeSubscriptionState>{
   ThemeSubscriptionCubit({required this.chatSubscriptionCubit}):super(const ThemeSubscriptionState(), App.wsUrl);

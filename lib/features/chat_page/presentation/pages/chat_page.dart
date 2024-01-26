@@ -4,11 +4,12 @@ import 'package:chat_client_app/core/presentation/app_ui.dart';
 import 'package:chat_client_app/core/presentation/widgets/app_progress_indicator.dart';
 import 'package:chat_client_app/core/presentation/widgets/widget_ext.dart';
 import 'package:chat_client_app/di/injection_container.dart';
+import 'package:chat_client_app/features/chat_page/data/websocket/send_message.dart';
 import 'package:chat_client_app/features/themes_page/data/theme_actioons.dart';
 import 'package:chat_client_app/features/themes_page/data/websocket/talk_theme.dart';
-import 'package:chat_client_app/features/themes_page/presentation/cubit/base_socket_subscription_cubit.dart';
-import 'package:chat_client_app/features/themes_page/presentation/cubit/chat_subscription_cubit.dart';
-import 'package:chat_client_app/features/themes_page/presentation/cubit/theme_subscription_cubit.dart';
+import 'package:chat_client_app/features/themes_page/domain/cubit/base_socket_subscription_cubit.dart';
+import 'package:chat_client_app/features/chat_page/domain/cubit/chat_subscription_cubit.dart';
+import 'package:chat_client_app/features/themes_page/domain/cubit/theme_subscription_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -26,6 +27,7 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> {
   late ThemeSubscriptionCubit _themeSubscriptionCubit;
   late ChatSubscriptionCubit _chatSubscriptionCubit;
+  final TextEditingController _messageController = TextEditingController();
 
   @override
   void dispose() {
@@ -63,6 +65,10 @@ class _ChatPageState extends State<ChatPage> {
                 widget.action == ThemeAction.select) {
               return _buildChatContent();
             } else {
+              if(state is UserNotConnectedState){
+                widget.theme.id = state.currendThemeId;
+              }
+              
               return _buildLoading();
             }
           }),
@@ -88,8 +94,12 @@ class _ChatPageState extends State<ChatPage> {
               children: [
                 SizedBox(
                   width: MediaQuery.of(context).size.width,
-                  child: const TextField(
-                    decoration: InputDecoration(
+                  child: TextField(
+                    controller: _messageController,
+                    onSubmitted: (value) {
+                      _chatSubscriptionCubit.sendMessage(Message(themeId: widget.theme.getId, message: _messageController.text));
+                    },
+                    decoration: const InputDecoration(
                       filled: true,
                       fillColor: AppColors.white1,
                       

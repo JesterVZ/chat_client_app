@@ -20,4 +20,6 @@ class TalkTheme {
     data['isCanRing'] = isCanRing;
     return data;
   }
+
+  String get getId => id ?? '';
 }

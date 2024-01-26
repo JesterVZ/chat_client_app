@@ -31,6 +31,8 @@ class ChatSubscriptionWebSocketChannel{
   /// Возвращает json мапу
   ValueStream get receivedSubscriptionMessages => _themesSubscriptionMessages.stream;
 
+  ValueStream get chatSubscriptionMessages => _chatSubscriptionMessages.stream;
+
   Future<void> connect() async {
     if (state == WebSocketState.initial || state == WebSocketState.disconnected) {
       _reconnectTries = 0;
@@ -56,7 +58,7 @@ class ChatSubscriptionWebSocketChannel{
     _channel!.on('themes', (data) => _themesSubscriptionMessages.add(data));
     _channel!.on('createdTheme', (data) => _themesSubscriptionMessages.add(TalkTheme.fromJson(jsonDecode(jsonEncode(data)))));
     _channel!.on('join', (data) => _themesSubscriptionMessages.add(UserJoinedInRoom(id: data)));
-    
+    _channel!.on('messages', (data) => _themesSubscriptionMessages.add(UserJoinedInRoom(id: data)));
   }
 
   /// Закрываем соединение. Можно будет перезапустить с помощью connect
@@ -107,6 +109,7 @@ class ChatSubscriptionWebSocketChannel{
 
   final _stateStream = BehaviorSubject<WebSocketState>.seeded(WebSocketState.initial);
   final _themesSubscriptionMessages = BehaviorSubject();
+  final _chatSubscriptionMessages = BehaviorSubject();
   set _state(WebSocketState state) => _stateStream.add(state);
 
   Socket? _channel;
